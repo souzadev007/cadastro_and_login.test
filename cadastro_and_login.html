@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cadastro e login!!!!</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #6dd5fa, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fefefe;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0,.2);
+            width: 300px;
+            text-align: center;
+            animation: aparecer 2.0s ease;
+        }
+
+        @keyframes aparecer {
+            from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+}
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0,3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #6dd5fa;
+            box-shadow: 0 0 8px rgba(109,231,250,0.5);
+        }
+
+        button {
+             width: 95%;
+             padding: 10px;
+             margin-top: 10px;
+             background-color: #6dd5fa;
+             border: none;
+             border-radius: 8px;
+             color: white;
+             font-weight: bold;
+             cursor: pointer;
+             transition: background 0.3s;
+        }
+
+        button:hover {
+             background-color: #2193b0;
+             transform: scale(1.03);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .troca {
+            margin-top: 15px;
+            color: #2193b0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .troca:hover {
+            text-decoration: underline;
+        }
+
+        #cadastroBox, #loginBox {
+            transition: all 0.4s ease;
+        }
+
+        
+
+       #mensagem {
+        
+           margin-top: 15px;
+           color: #168;
+           display: block;      /* garante que aparece */
+           min-height: 20px;    /* reserva espaço */
+           transition: opacity 0.4s ease;
+        }
+         
+        /* responsível*/
+
+        @media (max-width: 400px) {
+       .container {
+          width: 90%;
+          padding: 20px;
+        }
+
+        h2 {
+         font-size: 20px;
+    }
+
+    input {
+        font-size: 13px;
+    }
+}
+
+    footer {
+    background-color: #06121b;
+    text-align: center;
+    color: aliceblue;
+    padding: 20px;
+    margin-top: 30px;
+}
+        
+    </style>
+</head>
+<body>
+   <div class="container">
+    <div id="cadastroBox">
+    <h2>Cadastro</h2>
+
+    <input type="text" id="novoEmail" placeholder="Crie um email...">
+    <br><br>
+    
+    <input type="password" id="novaSenha" placeholder="Crie uma senha">
+    <br><br>
+
+    <button onclick="cadastrar()">cadastrar agora</button>
+     
+     <p onclick="mostrarLogin()" class="troca">Já tem conta? Faça login</p>
+   </div>
+
+   <div id="loginBox" style="display: none;">
+    <h2>Login</h2>
+
+    <input type="text" id="loginEmail" placeholder="Digite seu email...">
+    <br><br>
+
+    <input type="password" id="loginSenha" placeholder="Digite sua senha...">
+    <br><br>
+
+    <button onclick="login()">login</button>
+
+    <button onclick="mostrarCadastro()" class="troca">Não tem conta? Cadastre-se já!</button>
+   </div>
+    <p id="mensagem"></p>
+
+  </div>
+
+  
+
+    <script>
+        //variáveis//
+        let usuarios = [];
+
+        function cadastrar() {
+            let email = document.getElementById("novoEmail").value
+            let senha = document.getElementById("novaSenha").value
+
+            if (email === ""  || senha === "") {
+                document.getElementById("mensagem").innerHTML = "preencha todos os campos!"
+                return
+            } 
+
+            // verificar se ja existiu usuários com esse email//
+             let usuarioExistente = usuarios.find(function(usuario) {
+                 return usuario.email === email;    
+            });
+
+            if (usuarioExistente) {
+                document.getElementById("mensagem").innerHTML = "esse email já está cadastrado";
+                return;
+            }
+        
+            //adicionar novo usuário no array//
+            usuarios.push({
+                email: email,
+                senha: senha
+            });
+
+            document.getElementById("mensagem").innerHTML = "Cadastro realizado com sucesso";
+
+        
+        }
+
+        function login(){
+           let email = document.getElementById("loginEmail").value
+           let senha = document.getElementById("loginSenha").value
+           
+           let usuarioEncontrado = usuarios.find(function(usuario) {
+                return usuario.email === email && usuario.senha === senha;
+           });
+
+           if (usuarioEncontrado) {
+              document.getElementById("mensagem").innerHTML = "Login realizado com sucesso";
+           } else {
+              document.getElementById("mensagem").innerHTML = "Email ou senha incorretos!";
+           }
+        }
+
+        function mostrarLogin() {
+            document.getElementById("cadastroBox").style.opacity = "0";
+
+           setTimeout(function() {   
+               document.getElementById("cadastroBox").style.display = "none";
+               document.getElementById("loginBox").style.display = "block";
+               document.getElementById("loginBox").style.opacity = "1";  
+        }, 200);
+      }
+
+        function mostrarCadastro() {
+            document.getElementById("loginBox").style.opacity = "0";
+        
+            setTimeout(function() {
+             document.getElementById("loginBox").style.display = "none";
+             document.getElementById("cadastroBox").style.display = "block";
+             document.getElementById("cadastroBox").style.opacity = "1";
+            }, 200);
+        }
+        
+    </script>
+</body>
+</html>
